@@ -1,0 +1,36 @@
+__section__
+default
+__description__
+Display admin menu.
+
+* items = arrayref of hashref of menu items (value (link), label)
+* lightfontcolor = optional value for the font color of in the light mode menu
+
+__title__
+
+__page__
+menu
+__lang__
+zh_CN
+__name__
+info
+__template__
+
+[% tabs = [
+	{ link = "$gSkin.rootdir/admin.pl",			label = "文章",		sel_label = "stories" },
+	{ link = "$gSkin.rootdir/stats.pl",			label = "状态",		sel_label = "stats" },
+	{ link = "$gSkin.rootdir/admin.pl?op=siteinfo",	label = "网站",			sel_label = "site" },
+	{ link = "$gSkin.rootdir/admin.pl?op=topictree",	label = "主题树",			sel_label = "tree" },
+	{ link = "$gSkin.rootdir/admin.pl?op=recent_subs",	label = "订阅",			sel_label = "subs" },
+	{ link = "$gSkin.rootdir/admin.pl?op=slashd",	label = "Slashd",		sel_label = "slashd" },
+	{ link = "$gSkin.rootdir/admin.pl?op=recent_webheads", label = "Webheads",		sel_label = "webheads" },
+	{ link = "$gSkin.rootdir/admin.pl?op=mcd_stats",	label = "Memcached",		sel_label = "mcdstats" },
+	{ link = "$gSkin.rootdir/admin.pl?op=recent",	label = "安全",		sel_label = "security" },
+	{ link = "$gSkin.rootdir/admin.pl?op=topics",	label = "设置",		sel_label = "config" },
+];
+PROCESS tabbedmenu tabs=tabs color=color selected=page lightfontcolor=lightfontcolor || ""; %]
+
+__seclev__
+10000
+__version__
+$Id: info;menu;default,v 1.19 2004/07/01 18:05:23 jamiemccarthy Exp $

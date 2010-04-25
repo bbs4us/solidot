@@ -1,0 +1,46 @@
+__section__
+default
+__description__
+Message displayed when a user submits a comment.
+
+No specially passed variables.
+
+Pulls the user's message prefs, if appropriate.  Message 3 = "Moderation
+of Comment", message 4 = "Replay to Comment".  If both are set to "no,"
+give the user a little tip about how they can be turned on.
+
+__title__
+
+__page__
+comments
+__lang__
+zh_CN
+__name__
+comment_submit
+__template__
+
+<div class="generalbody">
+	<p>
+		评论提交。在你的评论成为静态页面的一部分之前将有一个时间延迟，你提交的已经显示在下面，如果有错误，你应该使用“预览”按钮！
+	</p>
+	[% IF metamod_elig %]
+		<p>
+			为了使 [% constants.sitename %] 的评判系统完全运行，我们需要尽可能多的用户来 <a href="[% gSkin.rootdir %]/metamod.pl">Meta-Moderate</a>.  你现在就可以... 为什么不加入呢？
+		</p>
+	[% END %]
+
+	[% IF !user.is_anon && constants.plugin.Messages %]
+		[% message = Slash.getObject('Slash::Messages');
+		prefs = message.getPrefs(user.uid);
+		messagecodes = message.getDescriptions('messagecodes');
+			IF (messagecodes.3 && !prefs.3.defined)
+			&& (messagecodes.4 && !prefs.4.defined) %]
+				当你的评论被评分或者回复后，如果你愿意接到通知，请访问 <a href="[% gSkin.rootdir %]/my/messages">信息设置页面</a>。
+			[% END %]
+	[% END %]
+</div>
+
+__seclev__
+1000
+__version__
+$Id: comment_submit;comments;default,v 1.13 2005/07/27 22:54:46 pudge Exp $

@@ -1,0 +1,86 @@
+__section__
+default
+__description__
+users login form
+
+__title__
+
+__page__
+login
+__lang__
+zh_CN
+__name__
+loginForm
+__template__
+<div id="users" class="wide">
+[% title = form.unickname ? '登录错误' : '登录' %]
+	[% PROCESS titlebar %]
+	<div class="generalbody">
+		<form action="[% constants.real_rootdir %]/login.pl" method="post">
+			<fieldset>
+			<legend>登录</legend>
+			<input type="hidden" name="op" value="userlogin">
+			[% IF form.unickname %]
+				[% user_uid = Slash.db.getUserUID(form.unickname) %]
+				<p class="message">
+					[% IF user.state.login_failed_reason == 'nopost' %]
+					    这个IP地址曾经被用于滥用系统，来自它的登录已经被禁用。
+					    如果你认为这是无根据的，请发邮件到 <a href="mailto:[% constants.adminmail_ban | strip_attribute %]">[% constants.adminmail_ban %]</a>, 
+					    并在邮件标题中包括你的 IP 地址(<b>[% env.remote_addr %]</b>)。我们将检查为什么会有这个禁止，如果你没有提供你的 IP 地址（再次，<em>在标题中!<em>），你的邮件将被删除不会被处理。
+					    我的意思是尽管发来，我们很友善，但我们精力也有限。
+					   
+					[% ELSE %]
+						危险，罗宾逊！登录不成功！你可能输错了密码或用户名，请再试一次，或者如果你忘记了密码，<a href="[% constants.real_rootdir %]/login.pl?op=mailpasswdform">把你的密码发送给你</a>。
+					[% END %]
+				</p>
+				[% IF user_uid and Slash.db.getUser(user_uid, "waiting_for_account_verify") %]
+					<p class="message"> 
+					验证你的帐号的信息已经发送到本帐号关联的邮箱，你的密码已经被重置。此刻这像是一个你登录遇到困难的理由。
+					<br>
+						<br>
+						请到你的邮箱查看已经更新过的登录信息， 或者 <a href="[% constants.real_rootdir %]/login.pl?op=mailpasswdform">把更新过的密码发送给你</a>。
+											</p>
+				[% END %]
+				[% IF constants.allow_anonymous %]
+					<p class="message">
+					   登录将允许你以自己的名义发表评论。如果没有登录，你将只能以 [% Slash.getCurrentAnonymousCoward("nickname") %] 发表。
+					</p>
+
+				[% ELSE %]
+					<p class="message">
+						只有拥有一个有效的帐号才能发表评论。
+					</p>
+				[% END %]
+			[% END %]
+                                <label>
+                                        用户名
+                                </label>
+                                <input type="text" name="unickname" size="20" value="[% form.unickname | strip_attribute %]">
+                                <label>
+                                        密码
+                                </label>
+                                <input type="password" name="upasswd" size="20" maxlength="20">
+                                <div class="note">
+                                        (长度为 6-20个字符)
+                                </div>
+                                <label class="checkbox">
+                                	<input type="checkbox" name="login_temp" value="yes" class="checkbox">
+					公共终端
+				</label>
+                                <input type="submit" name="userlogin" value="登 录" class="button">
+				</fieldset>
+		</form>
+
+		<p>
+			忘记了你的密码？输入用户名，用户 ID, 或者 Email 地址，<a href="[% constants.real_rootdir %]/login.pl?op=mailpasswdform">把你的密码发给你</a>。
+		</p>
+		<p>
+			如果你没有帐号，可以<a href="[% constants.real_rootdir %]/login.pl?op=newuserform">创建一个新帐号</a>。
+		</p>
+	</div>
+</div>
+
+__seclev__
+500
+__version__
+$Id: loginForm;login;default,v 1.9 2005/10/20 19:51:20 pudge Exp $

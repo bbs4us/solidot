@@ -1,0 +1,64 @@
+__section__
+default
+__description__
+Display votes and graph of votes
+
+* qid = question ID
+* width = passed to titlebar
+* title = passed to titlebar
+* voters = number of voters
+* pollitems = arrayref of available answers
+* notes = any notes to display to voter
+__title__
+
+__page__
+pollBooth
+__lang__
+zh_CN
+__name__
+vote
+__template__
+<div id="wide">
+	[% PROCESS titlebar %]
+	<div class="generalbody">
+		<div class="message">
+			[% notes %]
+		</div>
+		[% FOR poll = pollitems %]
+		[% answer     = poll.0
+			imagewidth = poll.1
+			votes      = poll.2
+			percent    = poll.3
+		%]
+			<table width="100%" border="0" cellpadding="0" cellspacing="0" class="bar">
+				<caption class="barAnswer">[% answer %]</caption>
+			        <tr>
+				[% IF percent > 0 %]
+       	        			<td width="[% percent %]%" class="barColor">&nbsp;</td>
+				[% END %]	
+       	 		       		<td class="barPercent">[% percent %]%</td>
+					<td align="right" class="barVotes">得票 [% votes %]</td>
+        			</tr>
+			</table>
+		[% END %]
+		<b class="totalVotes">总得票数 [% voters %]</b>
+		<br>
+		[
+			<a href="[% env.script_name %]?qid=[% qid | strip_paramattr %]">投票栏</a> |
+			<a href="[% env.script_name %]">其他投票</a> |
+			<a href="[% gSkin.rootdir %]/">返回首页</a>
+		]
+		<div class="note">
+			<ul>
+				<li>不要抱怨投票选项太少，选项越多可能越不好选择，你也许想选多个。</li>
+				<li>如果你认为有创造性请尽管向我们提供投票主意，强烈建议先查看一下过去的投票。</li>
+				<li>投票不一定客观真实，存在偏差，如果你把这个结果作为任何重要事情的参考，你是愚蠢的。</li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+__seclev__
+10000
+__version__
+$Id: vote;pollBooth;default,v 1.9 2006/01/23 20:42:59 pudge Exp $

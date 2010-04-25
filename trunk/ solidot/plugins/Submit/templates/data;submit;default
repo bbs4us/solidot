@@ -1,0 +1,107 @@
+__section__
+default
+__description__
+Repository for random data elements.
+
+* value = the name of the data element to retrieve
+
+Each data element may have any number of other variables.
+__title__
+
+__page__
+submit
+__lang__
+zh_CN
+__name__
+data
+__template__
+[% SWITCH value %]
+
+[% CASE 'header' %]
+	[% IF tbtitle %]
+		[% tbtitle %]: [% constants.sitename %] 提交
+	[% ELSE %]
+		[% constants.sitename %] 提交
+	[% END %]
+
+[% CASE 'updatehead' %]
+	[% IF subids.size > 0 %]
+		Deleting [% subids.size -%]
+		[%- IF subids.size == 1 %] 提交 [%
+		ELSE -%] submissions [% END -%]
+		[%- IF subids.size <= 3 %]( [% subids.join(', ') %] )[% END %]
+	[% END %]
+
+[% CASE 'mergehead' %]
+	[% IF subids.size > 0 %]
+		Deleting [% subids.size -%]
+		[%- IF subids.size == 1 %] 提交 [%
+		ELSE -%] submissions [% END -%]
+		[%- IF subids.size <= 3 %]( [% subids.join(', ') %] )[% END %]
+		- 提交合并
+	[% ELSE %]
+		没有提交
+	[% END %]
+
+[% CASE 'previewhead' %]
+	[% returnme.data_constant = 1 %]
+	[% constants.sitename %] 提交预览
+
+[% CASE 'defaulthead' %]
+	[% returnme.data_constant = 1 %]
+	[% constants.sitename %] 提交
+
+[% CASE 'maxallowed' %]
+	[% returnme.data_constant = 1 %]
+	<p><b>警告！你已经超出了每天允许的最多提交限制：
+	[% constants.max_submissions_allowed %]</b></p>
+
+[% CASE 'max_submissionsize_title' %]
+	[% returnme.data_constant = 1 %]
+	<b>提交的太大！</b>
+
+[% CASE 'max_submissionsize_err' %]
+	<p><b>警告！你提交的已经超出了可以添加到系统的每篇大小限制： [% size %] 字节。</b></p>
+	<p>如果你想这样保存你的提交，它将被删节。</p>
+
+[% CASE 'error' %]
+	[% returnme.data_constant = 1 %]
+	错误
+
+[% CASE 'filtererror' %]
+	<p>残缺过滤：<b>[% err_message %]</b></p>
+
+[% CASE 'compresserror' %]
+	[% returnme.data_constant = 1 %]
+	<b>压缩已经发现在你的提交中有一些错误。</b>
+
+[% CASE 'badsubject' %]
+	[% returnme.data_constant = 1 %]
+	请输入一个合理的标题。
+
+[% CASE 'defaultsection' %]
+	[% returnme.data_constant = 1 %]
+	所有分类
+
+[% CASE 'defaultskin' %]
+	[% returnme.data_constant = 1 %]
+	所有
+
+[% CASE 'defaultnote' %]
+	[% returnme.data_constant = 1 %]
+	没有
+
+[% CASE 'submit_body_open' %]
+	[% returnme.data_constant = 1 %]
+	<div class="generalbody">
+
+[% CASE 'submit_body_close' %]
+	[% returnme.data_constant = 1 %]
+	</div>
+
+[% END %]
+
+__seclev__
+10000
+__version__
+$Id: data;submit;default,v 1.14 2005/08/22 22:41:27 pudge Exp $

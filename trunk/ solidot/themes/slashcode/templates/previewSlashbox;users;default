@@ -1,0 +1,34 @@
+__section__
+default
+__description__
+Preview a slashbox
+
+* title = passed to titlebar
+* width = passed to titlebar
+* block = hashref of some block info (bid, title, block)
+* is_editable = current user may edit box
+__title__
+
+__page__
+users
+__lang__
+zh_CN
+__name__
+previewSlashbox
+__template__
+<div id="user-blocks">
+        [% PROCESS titlebar %]
+        <div class="generalbody">
+                
+                你看到的在右边的是被标记为"[% block.title | strip_literal %]"的模块预览。 如果你在 <a href="[% gSkin.rootdir %]/users.pl?op=edithome">设置页面</a> 选择它，
+                你将会把这个小模块添加到右边 <a href="[% gSkin.rootdir %]/index.pl">定制 [% constants.sitename %]</a> 页面。很令人惊奇？也不是，但是一个浪费时间的好方法。
+
+        [% IF is_editable %]
+                <p>编辑 <a href="[% gSkin.rootdir %]/admin.pl?op=blocks&amp;bid=[% form.bid %]">[% form.bid %]</a></p>
+        [% END %]
+        </div>
+</div>
+__seclev__
+10000
+__version__
+$Id: previewSlashbox;users;default,v 1.10 2006/05/16 14:54:48 Jesse Lee Exp $

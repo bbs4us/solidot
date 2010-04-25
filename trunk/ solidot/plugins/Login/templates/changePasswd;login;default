@@ -1,0 +1,82 @@
+__section__
+default
+__description__
+Change password form
+
+__title__
+
+__page__
+login
+__lang__
+zh_CN
+__name__
+changePasswd
+__template__
+<div id="slashboxes">
+        [% PROCESS userboxes %]
+</div>
+[% thisnickname = user.nickname | strip_literal;
+   title = "$thisnickname ($user.uid) 的密码修改" %]
+<div id="users-blocks">
+        [% PROCESS prefs_titlebar tab_selected='password' %]
+        <div class="generalbody">
+[% IF form.note == "Please change your password now!";
+        "请现在更改你的密码！ ";
+END; note %]
+
+[% IF constants.offer_insecure_login_link -%]
+		<p>你可以点击
+		 <a href="[% constants.real_rootdir %]/index.pl?op=userlogin&amp;logtoken=[% user.logtoken | strip_paramattr %]">这个链接</a>自动登录，并把结果页面加入书签，这样做很不安全，但比较方便。 
+		</p>
+[%- END %]
+
+		<form action="[% constants.real_rootdir %]/login.pl" method="post">
+		<fieldset>
+		<legend></legend>
+		[% PROCESS formkey_tag %]
+		<input type="hidden" name="uid" value="[% user.uid %]">
+
+[%- session = Slash.db.getDescriptions('session_login');
+   session_sel = Slash.createSelect('session_login', session, user.session_login, 1);
+
+   clocation = Slash.db.getDescriptions('cookie_location');
+   clocation_order = [];
+   FOREACH cloc = ['none', 'classbid', 'subnetid', 'ipid'];
+      clocation_order.push(cloc) IF clocation.$cloc;
+   END;
+   clocation_sel = Slash.createSelect('cookie_location', clocation, user.cookie_location, 1, 0, clocation_order);
+-%]
+
+		My <b><a href="[% gSkin.rootdir %]/faq/accounts.shtml#ac1200">登录期限</a></b> [% session_sel %] and [% clocation_sel %]
+
+		<p>注意：更改你的密码或 Cookie 设置将禁用这个账号的所有其他 Cookies, 要求在其他所有浏览器下使用这个账号需要获得重新授权。</p>
+
+			<label>
+				当前密码
+			</label>
+			<div class="note">
+				要更改密码，输入你现在的密码。
+			</div>
+		
+			<input type="password" name="oldpass" size="20" maxlength="20" value=""><br>
+
+			<label>
+				新密码
+			</label>
+			<div class="note">
+				输入你的新密码两次，长度必须为6-20个字符。
+			</div>
+			<input type="password" name="pass1" size="20" maxlength="20">
+			<input type="password" name="pass2" size="20" maxlength="20">
+
+
+			<input type="hidden" name="op" value="saveprefs">
+			<input type="submit" value="更改登录设置" class="button">
+			</fieldset>
+		</form>
+	</div>
+</div>
+__seclev__
+500
+__version__
+$Id: changePasswd;login;default,v 1.8 2006/02/17 22:26:04 pudge Exp $

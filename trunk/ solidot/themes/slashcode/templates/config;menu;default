@@ -1,0 +1,36 @@
+__section__
+default
+__description__
+Display admin menu.
+
+* items = arrayref of hashref of menu items (value (link), label)
+* lightfontcolor = optional value for the font color of in the light mode menu
+
+__title__
+
+__page__
+menu
+__lang__
+zh_CN
+__name__
+config
+__template__
+[% tabs = [
+	{ link = "$gSkin.rootdir/admin.pl",			label = "文章",	sel_label = "stories" },
+	{ link = "$gSkin.rootdir/admin.pl?op=topics",	label = "主题",	sel_label = "topics" },
+	{ link = "$gSkin.rootdir/admin.pl?op=blocks",	label = "模块",	sel_label = "blocks" },
+	{ link = "$gSkin.rootdir/admin.pl?op=colors",	label = "颜色",	sel_label = "colors" },
+	{ link = "$gSkin.rootdir/admin.pl?op=listfilters",	label = "过滤",	sel_label = "filters" },
+	{ link = "$gSkin.rootdir/sections.pl?op=list",	label = "分类",	sel_label = "sections" },
+	{ link = "$gSkin.rootdir/admin.pl?op=templates",	label = "模版",	sel_label = "templates" },
+	{ link = "$gSkin.rootdir/admin.pl?op=vars",		label = "变量",		sel_label = "vars" },
+	{ link = "$gSkin.rootdir/admin.pl?op=acls",		label = "访问控制",		sel_label = "acls" },
+	{ link = "$gSkin.rootdir/stats.pl",			label = "信息",		sel_label = "stats" },
+	{ link = "$gSkin.rootdir/admin.pl?op=recent",	label = "安全",	sel_label = "security" },
+];
+PROCESS tabbedmenu tabs=tabs color=color selected=page lightfontcolor=lightfontcolor || ""; %]
+
+__seclev__
+10000
+__version__
+$Id: config;menu;default,v 1.13 2004/06/17 16:12:24 jamiemccarthy Exp $

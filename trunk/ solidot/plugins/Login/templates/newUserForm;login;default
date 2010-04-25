@@ -1,0 +1,103 @@
+__section__
+default
+__description__
+Form for new user.
+
+No specially passed variables.
+__title__
+New User Form
+__page__
+login
+__lang__
+zh_CN
+__name__
+newUserForm
+__template__
+<div id="users" class="wide">
+	[% PROCESS titlebar title="创建帐号" %]
+		<div class="generalbody">
+			[% IF note %]
+				[% note %]
+			[% END %]
+			[% chars = constants.nick_chars;
+			   chars = chars.replace('abcdefghijklmnopqrstuvwxyz', 'a-z');
+			   chars = chars.replace('ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'A-Z');
+			   chars = chars.replace('0123456789', '0-9');
+			%]
+			<form action="[% constants.real_rootdir %]/login.pl" method="post">
+			<fieldset>
+			<legend></legend>
+			[% PROCESS formkey_tag %]
+				<label>
+					用户名
+				</label>
+				<input type="text" name="newusernick" value="">
+				<div class="note">
+					（注意：可以用于用户名的字符有 <tt>[% chars | strip_literal %]</tt> 和空格，当前不支持中文，其它的将被去除。）
+				</div>
+				<label>
+					Email 地址
+				</label>
+				<input type="hidden" name="op" value="newuser">
+				<input type="text" name="email" value="" size="40">
+				<input type="text" name="email2" value="" size="40">
+				<div class="note">
+					输入一个有效的 Email 地址<b>两次</b>，将把你的注册信息发到你的邮箱。在你没有设置显示的情况下，这个地址将不会被公开显示在 [% constants.sitename %].
+				</div>
+				<label>
+					<input type="checkbox" name="comment_reply" value="1" checked> 发给我添加到我的评论的回复
+				</label>
+				<label>
+					<input type="checkbox" name="newsletter" value="1"> 发送给我新闻快讯
+				</label>
+				<label>
+					<input type="checkbox" name="headlines" value="1"> 发送给我每日标题新闻
+				</label>
+				<label>
+					我的时区
+				</label> 
+			[%
+			USE this_format = format('%+0.4d %s');
+			this_tzdescs = Slash.db.getDescriptions('tzdescription');
+			this_tzcodes = Slash.db.getDescriptions('tzcodes');
+        	        these_tzdescs = {};
+			FOREACH tz = this_tzcodes.keys;
+				this_num = this_tzcodes.$tz / 36;
+				this_num = this_num.replace('50$', '30');
+				these_tzdescs.$tz = this_format(this_num, this_tzdescs.$tz);
+			END;
+
+			this_tzcode = user.tzcode_orig || user.tzcode;
+			Slash.createSelect('tzcode',
+				these_tzdescs, this_tzcode, 1, 0, this_tzcodes.nsort
+			);
+		%]
+		<div class="note">
+			选择你的本地时间。
+		</div>
+[% IF constants.plugin.HumanConf && constants.hc && constants.hc_sw_newuser && user.state.hc %]
+        [% IF user.state.hcinvalid %]
+                [% user.state.hcerror %]
+        [% ELSE %]
+		<label>
+			[% user.state.hcquestion %]
+                	[% user.state.hchtml %]
+                	<input type="text" name="hcanswer" value="" size=8 maxlength=8>
+		</label>
+		<p>Click the button to create your account and be mailed a password.</p>
+		<input type="submit" name="newuser" value="创建帐号">
+        [% END %]
+[% ELSE %]
+		<input type="submit" name="newuser" value="创建帐号">
+[% END %]
+</fieldset>
+</form>
+		<p>
+			<a href="[% constants.real_rootdir %]/login.pl?op=userlogin">登录到 [% constants.sitename %]</a>.<br> 忘记了你的密码？输入你的用户名，用户 ID, 或者 Email 地址<a href="[% constants.real_rootdir %]/login.pl?op=mailpasswdform">把你的密码发送给你</a>。
+		</p>
+	</div>
+</div>
+__seclev__
+10000
+__version__
+$Id: newUserForm;login;default,v 1.5 2006/05/09 22:21:36 Jesse Lee Exp $

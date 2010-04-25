@@ -1,0 +1,154 @@
+__section__
+default
+__description__
+Display submission form
+
+* fixedstory = submission for preview
+* savestory = boolean for OK to print "Submit" button
+* username = user's name
+* fakeemail = user's mail/URL
+* section = submission section name
+* topic = submission topic hashref
+* width = passed to titlebar
+* title = passed to titlebar
+__title__
+
+__page__
+submit
+__lang__
+zh_CN
+__name__
+displayForm
+__template__
+
+[% # set the variable 'subtext'
+   submission.storyonly = 0;
+   submission.email = fakeemail;
+   submission.name = username;
+   submission.story = fixedstory;
+   PROCESS formatSub %]
+
+[% PROCESS titlebar title = "$constants.sitename 文章提交" %]
+[% IF constants.submiss_view %]
+	<p>
+		<strong>
+			<a href="[% env.script_name %]?op=list">查看当前等待审核的提交</a>
+		</strong>
+	</p>
+[% END %]
+[% IF form.op AND !savestory %]
+	<div class="message error">
+		在提交前，你必须预览一次，提供一个标题，一些内容和一个主题。
+	</div>
+	[% IF missing_required.size > 0  %]
+	<div class="message error">
+		你还缺少了下面的一些要求区域
+		<ul>
+		[% FOREACH required = missing_required %]
+			<li>[% required.0 %]</li>	
+		[% END %]
+		</ul>
+	</div>
+	[% END %]
+[% END %]
+	<p>
+在这里你可以提交文章给 [% constants.sitename %] 的编辑们选择，也许你的文章将被发表出来让所有人分享。
+你应该写一个清晰简洁的标题，这<b>非常</b>重要！并且在文中包括相关链接。如果你想匿名提交，可以把 ID 区域留空白，匿名不影响我们将接受或拒绝文章。
+	</p>
+	<form action="[% env.script_name %]" method="post">
+        [% IF savestory %]
+                <fieldset>
+                        <legend>
+                                预览提交
+                        </legend>
+			<div class="article">
+                        	[% PROCESS titlebar width => "100%", title => form.subj %]
+				<div class="body">
+                        		<div class="topic">
+                                		<img src="[% constants.imagedir %]/topics/[% topic.image %]" alt="[% topic.textname %]" width="[% topic.width %]" height="[% topic.height %]">
+                        		</div>
+                       			[% subtext %]
+				</div>
+			</div>
+                </fieldset>
+        [% END %]
+		<fieldset>
+			<legend>
+				文章提交表格
+			</legend>
+		[% PROCESS reskey_tag %]
+		[%# username is the only of from, email, subj that needs to be filtered in %]
+		[%# the tag attribute; the others already have been in submit.pl.          %]
+			[% PROCESS formLabel value => "你的名字" %]
+			<input type="text" name="name" value="[% username | strip_attribute %]" size="50" maxlength="50">
+			[% PROCESS formNote note => "留空匿名提交" %]
+			[% PROCESS formLabel value => "你的 Email 或网站" "用户可以联系你" %]
+			<input type="text" name="email" value="[% fakeemail %]" size="50" maxlength="50">
+			[% PROCESS formNote note => "用户可以联系你" %]
+			[% PROCESS formLabel value => "标题"  %]
+			<input type="text" name="subj" value="[% form.subj %]" size="50" maxlength="50">
+			[% PROCESS formNote note => "简短描述！最佳结果是先放一些最重要的词语。"%]
+			[% PROCESS formNote note => "糟糕的标题=&#39;看这个&#39; 或 &#39;一篇文章&#39;。我们每天收到很多提交，如果你不把标题写清楚，文章将被删除。" %]
+	[% FOR extra = extras %]
+			[% PROCESS formLabel value => extra.0  %]
+		[% IF extra.2 == 'text' %]
+			<input type="text" name="[% extra.1 %]" value="[% form.${extra.1} | strip_attribute %]" size="50">
+		[% ELSIF extra.2 == 'textarea' %]
+			<textarea wrap="virtual" rows="[% user.textarea_rows || constants.textarea_rows %]" cols="[% user.textarea_cols || constants.textarea_cols %]" name="[% extra.1 %]">[% form.${extra.1} | strip_literal %]</textarea><br>
+		[% ELSIF extra.2 == 'list' %]
+			[% # section:value %]
+			[% Slash.createSelect(extra.1, Slash.db.getDescriptions('genericstring',extra.1), form.${extra.1}, 1, 1) %]	
+		[% END %]
+	[% END %]
+			[% hide_section_select = 0; hide_topic_select = 0 %]
+			[% primaryskid_val = form.primaryskid.defined ? form.primaryskid : constants.submission_default_skid;
+			IF constants.submission_force_default || (form.primaryskid && form.hss);
+				hide_section_select = 1; 
+			 END %]
+			[% IF form.hts && form.tid;
+				hide_topic_select = 1;
+			 END %]
+			[% section_topic_title = "" %]
+			[% IF hide_section_select && !hide_topic_select;
+				section_topic_title = "Select Topic";
+			ELSIF !hide_section_select && hide_topic_select;
+				section_topic_title = "Select Section";
+			ELSIF !hide_section_select && !hide_topic_select;
+				section_topic_title = "Select Section And Topic";
+			END %]
+			[% IF section_topic_title; PROCESS formLabel value => section_topic_title; END %]
+		[% IF hide_section_select %]
+			<input type="hidden" name="primaryskid" value="[% primaryskid_val | strip_attribute %]">
+			<input type="hidden" name="hss" value="1" >	
+		[% ELSE %]
+			[% Slash.createSelect('primaryskid', skin_values, primaryskid_val 1, 0, 1) %]
+		[% END %]
+		[% IF hide_topic_select %]
+			<input type="hidden" name="tid" value="[% form.tid | strip_attribute %]">
+			<input type="hidden" name="hts" value="1" >	
+		[% ELSE %]
+			[% Slash.createSelect('tid', topic_values, form.tid, 1, 0, 1)%]	
+		[% END %]
+			[% submitToLabel = skins.${constants.mainpage_skid}.title || "the main section" %]
+			[% PROCESS formNote note =>"通常提交到 $submitToLabel" %]
+			[% PROCESS formLabel value => "内容" %]
+			<textarea wrap="virtual" rows="[% user.textarea_rows || constants.textarea_rows %]" cols="[% user.textarea_cols || constants.textarea_cols %]" name="story">[% form.story | strip_literal %]</textarea><br>
+			[% PROCESS formNote note => "你确定你包含了一个链接吗？测试了链接是否有效吗？" %]
+			[% PROCESS formNote note => "HTML 是可以的，但请认真检查链接和 HTML 标签。" %]
+			[% PROCESS formLabel value => "提交格式" %]
+			[% def_type = form.sub_type || 'html'; sub_types = { "html" => "HTML 格式", "plain" => "纯文本" }; Slash.createSelect('sub_type', sub_types, def_type, 1) %]
+			[% IF form.url_id %]
+				<input type="hidden" name="url_id" value="[% form.url_id | strip_attribute %]">
+			[% END %]
+			<input type="submit" name="op" value="PreviewStory" class="button">
+		[% IF savestory %]
+			<input type="submit" name="op" value="SubmitStory" class="button">
+		[% ELSE %]
+			[% PROCESS formNote note => "在提交前，你必须预览一次，提供一个标题，一些内容和一个主题。" %]
+		[% END %]
+		</fieldset>
+	</form>
+__seclev__
+10000
+__version__
+$Id: displayForm;submit;default,v 1.37 2006/04/18 20:54:13 tvroom Exp $

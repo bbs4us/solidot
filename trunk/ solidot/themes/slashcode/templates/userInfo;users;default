@@ -1,0 +1,135 @@
+__section__
+default
+__description__
+Display user's info
+
+* title = passed to titlebar
+* useredit = hashref of info of the user being viewed
+* points = available moderation points
+* commentstruct = arrayref of comments
+* nickmatch_flag = current user is same as viewed user
+* mod_flag = is moderator
+	(no need for this anymore)
+* karma_flag = boolean for display karma
+* admin_block = admin stuff
+* admin_flag = boolean for whether to display admin stuff
+	(no real need for this, could just use user.is_admin)
+* fieldkey = the field key used to decide what we're looking at
+* reasons = hashref from $slashdb->getReasons()
+* lastjournal = last journal posted
+* hr_hours_back = number of hours back to show a <hr> for
+* cids_to_mods = hashref keyed by cid containing arrays of moderations done to that cid
+* comment_time = number of days back we are limiting the comments shown to.  If 0 or undefined we're showing comments sequentially w/o time limits
+
+__title__
+
+__page__
+users
+__lang__
+zh_CN
+__name__
+userInfo
+__template__
+[% orig_title = title %]
+<div id="slashboxes">
+[% PROCESS userboxes %]
+</div>
+[% title = orig_title %]
+<div id="users-blocks">
+[% PROCESS user_titlebar tab_selected='info' %]
+	<div class="generalbody">
+	[% IF nickmatch_flag %]
+
+	<p>
+		这是<b>你的</b>用户信息页面，还有成千上万更多的，但本页是属于你的。使用上面的链接你可以定制 [% constants.sitename %], 设置个人喜好，添加书签，发表日志，查看消息，更改密码等。</p>
+
+		[% IF ! useredit.registered %]
+			<div class="error">
+				这个帐户当前已经到期，请<a href="[% gSkin.rootdir %]/users.pl?op=validateuser">重新注册</a>。<br>
+			</div>
+		[% END %]
+
+	<hr>
+	[% END %]
+
+	[% IF admin_flag %]
+		[% admin_block %]
+	[% END %]
+
+	[% IF lastjournal %]
+		<p>
+			最新日志文章：
+			<b>
+				<a href="[% gSkin.rootdir %]/~[% useredit.nick_plain | strip_paramattr %]/journal/">
+					[% lastjournal.description | strip_notags %]
+				</a>
+			</b>,
+			[% Slash.timeCalc(useredit.journal_last_entry_date) %]
+			([% lastjournal.commentcount || 0 %] comment[% IF lastjournal.commentcount != 1 %]s[% END %])
+			[% IF lastjournal.article_shrunk %]
+				<p>
+					[% lastjournal.article_shrunk; END %]
+				</p>
+			[% ELSE %]
+				<p>
+					<i>
+						(没有日志文章)
+					</i>
+				</p>
+			[% END %]
+
+			[% Slash.createMenu("journal", style => "tabbed") %]
+			[% PROCESS listComments admin_flag=admin_flag commentstruct=commentstruct commentcount=commentcount min_comment=min_comment reasons=reasons cids_to_mods=cids_to_mods type="user" useredit=useredit comment_time=comment_time%]
+			[% IF admin_flag %]
+				<p>	
+        				[% thisnickname = useredit.nickname | strip_literal;
+        				   mod_options.title = "Moderations performed by $thisnickname";
+					   mod_options.show_m2s = form.show_m2s.defined ? form.show_m2s : user.m2_with_mod;
+					   mod_options.need_m2_form = 1;
+					   mod_options.need_m2_button = 1;
+					   mod_options.meta_mod_only = 1;
+					 %]
+				</p>
+				<p>
+					[% Slash.moderatorCommentLog('uid', useredit.uid, mod_options) %]
+				</p>
+				[% IF !constants.show_mods_with_comments %]
+					<p>
+						[% mod_options.title = "Moderations performed on ${useredit.nickname}'s comments";
+						   mod_options.hr_hours_back = hr_hours_back %]
+						[% Slash.moderatorCommentLog('cuid', useredit.uid, mod_options) %]
+					</p>
+				[% END %]
+			[% END %]
+		</p>
+		<p>
+			[% IF admin_flag;
+				m2_title = "${useredit.nickname}'s Recent M2s";
+				m2_listing = form.m2_listing.defined ? form.m2_listing : user.show_m2_listing;
+				PROCESS listMetamods
+				title = m2_title 
+				m2_listing = m2_listing 
+				metamods = metamods 
+				the_user = useredit;
+			END %]
+
+			[% IF submissions.size > 0  %]
+				<p>
+				[% IF admin_flag or useredit.uid == user.uid;
+					title = "${useredit.nickname} 的最新提交";
+				   ELSE;
+					title = "${useredit.nickname} 的最近已被接受的提交";
+				END %]
+				[% PROCESS listSubmissions title=title admin_flag=admin_flag submissions=submissions %]
+				</p>
+			[% END %]
+			[% IF user.is_admin && tagshist && tagshist.size > 0 %]
+				[% title = "${useredit.nickname} 的最新标签"; %]
+				[% PROCESS usertaghistory tagshist = tagshist title = title %]
+			[% END %]
+	</div>
+</div>
+__seclev__
+500
+__version__
+$Id: userInfo;users;default,v 1.82 2006/03/14 21:26:59 tvroom Exp $

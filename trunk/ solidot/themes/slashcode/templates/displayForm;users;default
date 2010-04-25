@@ -1,0 +1,117 @@
+__section__
+default
+__description__
+Display login form
+
+* newnick = new nickname
+* title = passed to titlebar
+* msg = message to display
+* title2 = second title ?
+
+Um ... I think this template is not in use any longer. -- pudge
+
+__title__
+
+__page__
+users
+__lang__
+zh_CN
+__name__
+displayForm
+__template__
+
+	[% PROCESS titlebar title=title %]
+	<div class="generalbody">
+		[% IF form.unickname %]
+			<div class="error">
+				你没有登录！你可能输入了错误的密码，或者错误的用户名。再试一下，或者如果你忘记了密码，可以点击发送密码按钮。
+			</div>
+			[% IF constants.allow_anonymous %]
+				<p class="message">
+	   				登录后将允许你以自己的名义发表的评论。如果没有登录，你将只能作为 [% Slash.getCurrentAnonymousCoward("nickname") %] 来发表。
+				</p> 
+			[% ELSE %]
+				<p class="message">
+				你需要有一个有效的帐户才能发表评论。
+				</p>
+			[% END %]
+		[% ELSE %]
+		[% END %]
+
+		<form action="[% env.script_name %]" method="get">
+			<fieldset>
+				<legend>
+					Login
+				</legend>
+				<input type="hidden" name="op" value="userlogin">
+				<label>
+					Nickname
+				</label>
+				<input type="text" name="unickname" size="20" value="[% form.unickname | strip_attribute %]">
+				<label>
+					Password
+				</label>
+				<input type="password" name="upasswd" size="20" maxlength="20">
+				[% PROCESS formNote note="(6-20 characters long)" %]
+				</div>
+				<input type="checkbox" name="login_temp" value="yes"> Public Terminal
+				<input type="submit" name="userlogin" value="登录">
+			</fieldset>
+		</form>
+
+		<form action="[% env.script_name %]" method="get">
+			[% PROCESS titlebar title="Mail Password" %]
+			<input type="hidden" name="op" value="mailpasswd">
+			<fieldset>
+			        <legend>
+        	  	      		忘记密码？
+        			</legend>
+				<p>
+					在这里输入你的用户名，系统将把密码发送到你的邮箱。
+				</p>
+			        <label>
+		                	用户名
+        			</label>
+			        <input type="text" name="unickname" size="20" value="[% form.unickname | strip_attribute %]">
+				<input type="submit" name="mailpasswd" value="发送密码">
+			</fieldset>
+		</form>
+
+		<form action="[% env.script_name %]" method="get">
+		[% PROCESS titlebar title=title2 %]
+		<input type="hidden" name="op" value="newuser">
+			<fieldset>
+				<legend>
+					新用户信息
+				</legend>
+				<p class="message">
+					[% msg2 %]
+				</p>
+				<div class="note">
+					(注意: 可以用于用户名的字符有：<tt>0-9a-zA-Z_.+!*'(),-\$</tt>, 空格。当前不支持中文名字，并且所有其他的字符将被去除。)
+				</div>
+				<label>
+					选择的用户名
+				</label>
+				<input type="text" name="newusernick" size="20" maxlength="20" value="[% newnick %]">
+				<label>
+					有效的 Email 地址
+				</label>
+				<input type="text" name="email" size="20" value="[% form.email | strip_attribute %]">
+				<div class="note">
+					发送你的注册信息的地址。这个地址将<b>不会</b>被公开显示在 [% constants.sitename %].
+				</div>
+				<input type="submit" name="newuser" value="创建帐户">
+				[% PROCESS formNote note="点击按钮创建你的帐户并发送密码。" %]
+				</div>
+				<p class="submessage">
+					[% msg1 %]
+				</p>
+			</fieldset>
+		</form>
+	</div>
+
+__seclev__
+500
+__version__
+$Id: displayForm;users;default,v 1.9 2005/07/27 22:54:47 pudge Exp $
