@@ -1,0 +1,49 @@
+__section__
+default
+__description__
+
+__title__
+
+__page__
+messages
+__lang__
+zh_CN
+__name__
+display
+__template__
+[% thisnickname = user.nickname | strip_literal;
+   PROCESS titlebar title => "$thisnickname 的 $constants.sitename 信息", width => "100%" %]
+[% Slash.createMenu('messages') %]
+
+[% IF message && message.user.uid == user.uid %]
+
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr><td bgcolor="[% user.colors.bg_2 %]">
+    <b>[% message.subject %]</b><br>
+    sent by <b>[% constants.sitename %] 消息系统</b>
+    on [% Slash.timeCalc(message.date) %]<br>
+  </td></tr>
+  <tr><td bgcolor="[% user.colors.bg_1 %]">
+    [% message.message %]
+  </td></tr>
+  <tr><td align="left">
+    <form action="[%gSkin.rootdir %]/messages.pl" method="post">
+    <input type="hidden" name="id" value="[% message.id %]">
+    <input type="hidden" name="op" value="delete_message">
+    <input type="submit" value="删除消息">
+    </form>
+  </td></tr>
+</table>
+
+[% ELSE %]
+
+<p>
+该信息在系统中没有发现。可能没有发送，也可能已被删除或从系统中清理了，或者已通过其他途径传送，或者没有发送给你而是其他用户。
+</p>
+
+[% END %]
+
+__seclev__
+500
+__version__
+$Id: display;messages;default,v 1.6 2006/02/17 22:26:04 pudge Exp $

@@ -1,0 +1,93 @@
+__section__
+default
+__description__
+Menu for sidebar and bottom (see header template and Slash::horizmenu() function)
+
+No specially passed variables.
+__title__
+
+__page__
+misc
+__lang__
+zh_CN
+__name__
+mainmenu
+__template__
+	<ul>	
+	<li>
+		<a href="[% gSkin.rootdir %]/faq/">常见问题</a>
+	</li>
+	<li>
+		<a href="[% gSkin.rootdir %]/authors.pl">编辑介绍</a>
+	</li>
+	<li>
+		<a href="[% gSkin.rootdir %]/about.shtml">关于</a>
+	</li> 
+	<li>
+        <a href="http://mail.solidot.org/" target="_blank">邮箱</a> 
+    </li>
+	<li>
+		<a href="[% gSkin.rootdir %]/comments.pl">讨论</a>
+	</li>
+	<li>
+		<a href="[% gSkin.rootdir %]/journal.pl">日志</a>
+	</li>
+	<li>
+		<a href="[% gSkin.rootdir %]/messages.pl">消息</a>
+	</li>  
+  		[% IF user.is_anon %]
+		<li>
+			<a href="[% gSkin.rootdir %]/my/">注册/登录</a>
+		</li>
+		[% ELSE %]
+		<li class="user">
+			<em>你的</em>
+			<ul>
+				<li>
+					<a href="[% gSkin.rootdir %]/my/info">信息</a>
+				</li>
+				<li>
+					<a href="[% gSkin.rootdir %]/my/inbox">收件箱</a>
+				</li>
+				<li>
+					<a href="[% gSkin.rootdir %]/my/homepage">首页</a>
+				</li>
+				<li>
+					<a href="[% gSkin.rootdir %]/my/comments">评论</a>
+				</li>
+				<li>
+					<a href="[% gSkin.rootdir %]/my/journal">日志</a>
+				</li>
+				<li>
+					<a href="[% gSkin.rootdir %]/my/messages">消息</a>
+				</li>
+				<li>
+					<a href="[% gSkin.rootdir %]/my/misc">杂项</a>
+				</li>
+				<li>
+					<a href="[% gSkin.rootdir %]/my/amigos">挚友</a>
+				</li>
+				<li>
+					<a href="[% gSkin.rootdir %]/my/friends">朋友</a>
+				</li>
+				<li>
+					<a href="[% gSkin.rootdir %]/my/foes">敌人</a>
+				</li>
+				<li>
+					<a href="[% gSkin.rootdir %]/my/fans">粉丝</a>
+				</li>
+				<li>
+					<a href="[% gSkin.rootdir %]/my/password">更改密码</a>
+				</li>
+				<li>
+					<a href="[% gSkin.rootdir %]/my/logout">退出</a>
+				</li>
+			</ul>
+		</li>
+		[% END %]
+	</ul>
+
+__seclev__
+10000
+__version__
+$Id: mainmenu;misc;default,v 1.13 2005/07/27 22:54:48 pudge Exp $

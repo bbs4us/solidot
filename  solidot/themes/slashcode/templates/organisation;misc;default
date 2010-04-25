@@ -1,0 +1,36 @@
+__section__
+default
+__description__
+Block of text for incluzion in header.
+
+No specially passed variables.
+__title__
+
+__page__
+misc
+__lang__
+zh_CN
+__name__
+organisation
+__template__
+<ul>
+<li><a href="//solidot.org/">首页</a></li>
+<li><a href="//it.solidot.org/">IT</a></li>
+<li><a href="//linux.solidot.org">Linux</a></li>
+<li><a href="//opensource.solidot.org">开源</a></li>
+<li><a href="//books.solidot.org/">书籍</li>
+<li><a href="//developers.solidot.org/">开发者</a></li>
+<li><a href="//apple.solidot.org/">苹果</a></li>
+<li><a href="//games.solidot.org/">游戏</a></li>
+<li><a href="//hardware.solidot.org/">硬件</a></li>
+<li><a href="//software.solidot.org/">软件</a></li>
+<li><a href="//interviews.solidot.org/">采访</a></li>
+<li><a href="//internet.solidot.org/">互联网</a></li>
+<li><a href="//ask.solidot.org/">询问Solidot</a></li>
+<li><a href="//science.solidot.org/">科学</a></li>
+<li><a href="//society.solidot.org/">社会</a></li>
+</ul>
+__seclev__
+500
+__version__
+$Id: organisation;misc;default,v 1.6 2003/03/04 19:07:59 pudge Exp $

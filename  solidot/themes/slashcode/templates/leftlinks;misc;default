@@ -1,0 +1,29 @@
+__section__
+default
+__description__
+Block of text for incluzion in header.
+No specially passed variables. 
+
+__title__
+no title
+__page__
+misc
+__lang__
+zh_CN
+__name__
+leftlinks
+__template__
+<ul>
+<li><a href="http://www.bloglu.com" target="_blank" title="博客录 - 中文博客投稿社区"><img border="0" alt="博客录" src="http://solidot.org/images/btn/bloglu.jpg"></a></li>
+<li><a href="http://www.lupaworld.com" target="_blank" title="Lupa开源社区"><img src="http://solidot.org/images/btn/lupa.gif" border="0" alt="Lupa开源社区" /></a></li>
+<li><a href="http://www.op800.com/englishjokes/" target="_blank" title="EJokes">EJokes</a></li>
+<li><a href="http://www.livedigg.com/" target="_blank" title="livedigg 发掘网络上的新东西">livedigg</a></li>
+<li><a href="http://www.buzzc.com">buzzc.com</li>
+<li><a href="http://www.haotianxia.com" target="_blank" title="好天下">好天下</a></li>
+<li><a href="http://www.icgo.com.cn/" title="电子搜索网" target="_blank">电子搜索网</a></li>
+<li><a href="mailto:service@solidot.org">加入链接</a></li> 
+</ul>
+__seclev__
+200
+__version__
+$Id: leftlinks;misc;default,v 0.1 2006/05/23 19:07:59 Jesse Lee Exp $

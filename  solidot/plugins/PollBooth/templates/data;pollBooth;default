@@ -1,0 +1,91 @@
+__section__
+default
+__description__
+Repository for random data elements.
+
+* value = the name of the data element to retrieve
+
+Each data element may have any number of other variables.
+__title__
+
+__page__
+pollBooth
+__lang__
+zh_CN
+__name__
+data
+__template__
+[% SWITCH value %]
+
+[% CASE 'title' %]
+	[% returnme.data_constant = 1 %]
+	[% constants.sitename %] 投票
+
+[% CASE 'edit_poll_title' %]
+	[% IF qid %]Editing Poll #[% qid %][% ELSE %]新投票[% END %]
+
+[% CASE 'invalid_sid' %]
+	[% returnme.data_constant = 1 %]
+	指定的文章ID无效，请纠正后再试。
+[% CASE 'attached_to_other' %]
+	[% returnme.data_constant = 1 %]
+	文章已经附加了一个不同的投票，保存前请把投票从文章分离。
+[% CASE 'invalid' %]
+	[% returnme.data_constant = 1 %]
+	无效投票！<br>
+
+[% CASE 'display' %]
+	[% returnme.data_constant = 1 %]
+	显示投票结果。
+
+[% CASE 'uid_voted' %]
+	[% user.nickname | strip_literal %] 在 [% env.remote_addr %] 已经投过票。
+	[% IF env.http_x_forwarded_for %]
+	(proxy for [% env.http_x_forwarded_for %])
+	[% END %]
+
+[% CASE 'poll_closed' %]
+	[% returnme.data_constant = 1 %]
+	本投票已经关闭。
+
+[% CASE 'success' %]
+	你的投票 ([% aid %]) 已经加入。
+
+[% CASE 'reject' %]
+	你的投票 ([% aid %]) 已被拒绝。
+
+[% CASE 'noquestion' %]
+	[% returnme.data_constant = 1 %]
+	你必须提供一个问题。
+
+[% CASE 'noanswer' %]
+	[% returnme.data_constant = 1 %]
+	你必须提供一个或更多的回答。
+
+[% CASE 'slashbox_head' %]
+	[% returnme.data_constant = 1 %]
+	<div id="slashboxes">
+
+[% CASE 'slashbox_foot' %]
+	[% returnme.data_constant = 1 %]
+	</div>
+
+[%# for ResKeys %]
+[% CASE 'anon' %]
+	[% returnme.data_constant = 1 %]
+	你不能匿名投票，请<a href="[% constants.real_rootdir %]/users.pl">登录</a>。
+
+[% CASE 'no qid' %]
+	[% returnme.data_constant = 1 %]
+	缺少投票ID.
+
+[% CASE 'already voted' %]
+	[% returnme.data_constant = 1 %]
+	你已投过票。
+
+[% END %]
+
+__seclev__
+10000
+__version__
+$Id: data;pollBooth;default,v 1.11 2005/11/08 19:11:25 pudge Exp $

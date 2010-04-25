@@ -1,0 +1,58 @@
+__section__
+default
+__description__
+Template displayed whenever a user performs a re-validation operation.
+
+Depends on the following variables:
+
+	* form => passed in by default
+
+	* user => passed in by default
+
+	* constants => passed in by default
+__title__
+User Revalidation template.
+__page__
+users
+__lang__
+en_US
+__name__
+regResult
+__template__
+
+[% IF user.reg_id && user.reg_id == form.id %]
+<h2>感谢注册！</h2>
+很抱歉打扰，但每个用户如果想使用一个身份来发表，必须在系统内注册一个有效的 Email 。
+Thanks for putting up with the hassle.
+<p>我们希望你继续喜欢 [% constants.sitename %]!
+
+[% ELSE %]
+  [% IF form.id && user.reg_id != form.id %]
+<h2>ID Mismatch!</h2>
+Sorry, but the re-registration data which you have provided is invalid, please
+try again!<p>
+  [% ELSE %]
+<h2>Welcome, [% user.nickname | strip_literal %]!</h2>
+  [% END %]
+
+In the entry field below, please enter the registration ID which should have
+been emailed to the email address associated with your user account.
+
+<!-- Begin entry form for registration data. -->
+
+<form action="[% gSkin.rootdir %]/users.pl" method=POST>
+<input type=HIDDEN name="op" value="validateuser">
+Registration ID: &nbsp;
+<input type=TEXT name="id" value="" size=32>
+<p>
+<input type=SUBMIT>
+</form>
+
+<!-- End entry form -->
+
+[% END %]
+
+__seclev__
+10000
+__version__
+$Id: regResult;users;default,v 1.6 2005/07/27 22:54:48 pudge Exp $

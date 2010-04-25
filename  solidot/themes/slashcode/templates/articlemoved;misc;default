@@ -1,0 +1,35 @@
+__section__
+default
+__description__
+模版用来处理从老文章地址到新文章的转向
+
+url - url to redirect to
+
+See:
+https://sourceforge.net/tracker/index.php?func=detail&aid=1052367&group_id=4421&atid=104421
+
+__title__
+Useless title to template
+__page__
+misc
+__lang__
+zh_CN
+__name__
+articlemoved
+__template__
+<html>
+<head>
+<meta http-equiv="refresh" content="1;URL=[% url %]">
+<title>页面已移动</title>
+</head>
+<body>
+<b>本页已经被移动</b>
+<p>
+如果你的浏览器没有自动转向，请点击<a href="[% url %]">这里</a>。
+</p>
+</body>
+</html>
+__seclev__
+10000
+__version__
+$Id: articlemoved;misc;default,v 1.0 2006/05/08 22:54:46 Jesse Lee Exp $

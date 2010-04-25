@@ -1,0 +1,32 @@
+__section__
+default
+__description__
+Text of mail message system sends out to periodically verify email address validity.
+
+* registryid 	= Serial number that identifies a specific user's registration request.
+* useradmin	= Name, link, email address or some other identifier with which users can use
+		  to resolve any user problems.
+
+__title__
+Email Verification - Reminder
+__page__
+messages
+__lang__
+zh_CN
+__name__
+rereg_mail
+__template__
+这是一封友好的邮件来自 [% constants.sitename %]，提醒你你的密码已到期。
+如果你愿意继续保留在本站的注册，请访问下面的链接：
+
+[% gSkin.absolutedir %]/users.pl?op=validateuser&id=[% reg_id %]
+
+并且按照步骤重新注册会很快很简单。
+
+我们抱歉给你带来的不便！ 如果我们可以改进这个程序，请发送你的建议给管理员([% useradmin %])。
+
+
+__seclev__
+1000
+__version__
+$Id: rereg_mail;messages;default,v 1.4 2006/05/17 16:12:25 Jesse Lee Exp $

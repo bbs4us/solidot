@@ -1,0 +1,91 @@
+__section__
+default
+__description__
+A template with logic to return the varioustitle in users.pl, used by the subroutine getTitles in users.pl
+
+* value = the name of the data element to retrieve
+
+Each data element may have any number of other variables.
+__title__
+
+__page__
+users
+__lang__
+zh_CN
+__name__
+titles
+__template__
+[% SWITCH value %]
+
+[% CASE 'previewslashbox_title' %]
+	预览 [% blocktitle | strip_literal %]
+
+[% CASE 'newUser_title' %]
+	用户 [% form.newusernick %] 已创建。
+
+[% CASE 'mailPassword_email_title' %]
+	[% constants.sitename %] 用户 [% nickname %] 的密码
+
+[% CASE 'reset_acct_email_title' %]
+	验证 [% constants.sitename %] 用户 [% nickname %] 的帐号
+
+[% CASE 'userInfo_main_title' %]
+	欢迎回来 [% nick %] ([% uid %])
+
+[% CASE 'userInfo_user_title' %]
+	[% nick %] ([% uid %]) [% PROCESS zoo_icons person=uid implied="" %]
+
+[% CASE 'user_netID_user_title' %]
+	[% md5id_vis %] ([% id %]) 的用户信息
+
+[% CASE 'editUser_title' %]
+	编辑 [% user_edit.nickname | strip_literal %] ([% user_edit.uid %]) [% user_edit.realemail | strip_literal %]
+
+[% CASE 'changePasswd_title' %]
+    [% user_edit.nickname | strip_literal %] ( [% user_edit.uid %]) 的密码修改
+
+[% CASE 'tildeEd_title' %]
+	定制首页文章
+
+[% CASE 'tildeEd_customize_title' %]
+	定制 Solidot 模块
+
+[% CASE 'editHome_title' %]
+	定制 [% constants.sitename %] 的显示
+
+[% CASE 'editComm_title' %]
+	评论选项
+
+[% CASE 'editMiscOpts_title' %]
+	杂项
+
+[% CASE 'editTags_title' %]
+	标签选项
+
+[% CASE 'displayForm_new_title' %]
+	我是新用户！
+
+[% CASE 'displayForm_dup_title' %]
+	重复帐号！
+
+[% CASE 'displayForm_title' %]
+	登录
+
+[% CASE 'mailPasswdForm_title' %]
+	发送密码
+	
+[% CASE 'newUserForm_title' %]
+	创建帐号
+	
+[% CASE 'displayForm_err_title' %]
+	登录错误
+
+[% CASE 'saveUser_email_title' %]
+	[% constants.sitename %] 用户 [% nickname %] 的邮箱更改
+
+[% END %]
+
+__seclev__
+10000
+__version__
+$Id: titles;users;default,v 1.13 2006/03/08 17:36:07 jamiemccarthy Exp $

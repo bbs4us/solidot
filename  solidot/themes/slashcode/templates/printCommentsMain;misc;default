@@ -1,0 +1,157 @@
+__section__
+default
+__description__
+The main box for printing comments
+
+* comments = big ol' arrayref of comments
+* title = title of story
+* count = count of comments
+* sid = story ID
+* cid = base comment ID
+* pid = base parent ID
+* lvl = what nesting level we're at
+__title__
+
+__page__
+misc
+__lang__
+zh_CN
+__name__
+printCommentsMain
+__template__
+[% discussion2 = user.discussion2 && (user.discussion2 == "slashdot" || user.discussion2 == "uofm") %]
+
+<a name="acomments"></a>
+
+<div class="commentwrap">
+[% IF user.is_admin || user.acl.discussion2_slashdot || user.is_subscriber || (!constants.subscribe && !user.is_anon) %]
+<div class="commentBox" style="font-size: 14px">
+	<form method="GET" action="[% gSkin.rootdir %]/comments.pl">
+	<div>
+	<input type="hidden" name="op" value="setDiscussion2">
+	<input type="hidden" name="sid" value="[% sid %]">
+	[% IF cid %]<input type="hidden" name="cid" value="[% cid %]">[% END %]
+	[% IF pid %]<input type="hidden" name="pid" value="[% pid %]">[% END %]
+	<input type="checkbox" name="discussion2_slashdot" value="1" onchange="this.form.submit();"[% constants.markup_checked_attribute IF user.discussion2 == 'slashdot' %]>
+	我愿意帮助测试 <a href="http://slashdot.org/faq/com-mod.shtml#cm120">Solidot 的新讨论系统</a>。
+	<noscript><input type="submit"></noscript>
+	</div>
+	</form>
+</div>
+[% END; IF (user.acl.discussion2_uofm_signup && !user.acl.discussion2_uofme && (user.is_admin || !user.is_subscriber)) && constants.uofm_key && constants.uofm_iv %]
+<div class="commentBox" style="font-size: 120%">
+Want to <a href="[% Slash.tempUofmLinkGenerate() %]">test</a> an experimental interface for comments?
+</div>
+[% END %]
+
+<div class="commentBox">
+[% IF title %]
+	<a href="[% link | strip_urlattr %]">[% title %]</a>
+[% ELSE %]
+	[% Slash.linkComment({
+		sid	=> sid,
+		pid	=> pid,
+		subject	=> 'Top',
+		subject_only => 1,
+	}) %]
+[% END %]
+
+	|
+
+[% IF user.is_anon %]
+	<a href="[% gSkin.rootdir %]/users.pl">登录/创建一个账号</a>
+[% ELSE %]
+		<a href="[% gSkin.rootdir %]/my/comments">设置</a>
+[% END %]
+
+		| [% Slash.linkComment({
+			sid	=> sid,
+			pid	=> 0,
+			subject	=> '顶部',
+			subject_only => 1,
+		}) %]
+
+[% IF user.points %]
+	| <b>[% user.points %]</b>
+	<a href="[% gSkin.rootdir %]/moderation.shtml">
+	moderator</a>
+	point[% user.points == 1 ? '' : 's' %]
+[% END %]
+
+[% IF count %]
+	| <b>[% count %]</b> 条评论
+[% END %]
+
+[% IF lvl && user.mode == 'thread' %]
+	(Spill at <b>[% user.commentspill %]</b>!) | Index Only
+[% END %]
+
+[% IF form.startat %]
+		| Starting at #[% form.startat %]
+[% END %]
+
+		| <a href="[% gSkin.rootdir %]/search.pl?op=comments&amp;sid=[% sid %]">搜索讨论</a>
+	</div>
+	<div class="commentBoxForm" id="commentControlBox">
+		<form action="[% gSkin.rootdir %]/comments.pl">
+		<fieldset>
+		<legend>显示选项</legend>
+	[% IF discussion2;
+		highlightthresh = user.highlightthresh;
+		highlightthresh = user.threshold IF highlightthresh < user.threshold;
+		threshes = [user.highlightthresh, user.threshold] %]
+		<input type="button" value="Worse"  name="ht_worse"  id="ht_worse"  onclick="changeHT(-1)" disabled>
+		<input type="button" value="Better" name="ht_better" id="ht_better" onclick="changeHT(1)" disabled>
+		HT: <span id="currentHT" style="background: black; color: white; padding: 0 2px 0 2px; margin-right: 5em;">[% threshes.highval %]</span>
+
+		<input type="button" value="More" name="t_more" id="t_more" onclick="changeT(-1)" disabled>
+		<input type="button" value="Less" name="t_less" id="t_less" onclick="changeT(1)" disabled>
+		T: <span id="currentT" style="background: black; color: white; padding: 0 2px 0 2px; margin-right: 5em;">[% user.threshold %]</span>
+
+		[%# 门槛: Slash.selectThreshold(comments.0.totals, { onclick => 'changeThreshold(this.value)' }) %]
+
+		<noscript>
+
+	[%- ELSE %]
+		门槛: [%
+			Slash.selectThreshold(comments.0.totals);
+			IF user.mode != 'parents' && user.mode != 'child';
+			  Slash.selectMode(user.mode);
+			END;
+			Slash.selectSortcode(user.commentsort) %]
+
+	[%- END %]
+
+	[% UNLESS user.is_anon %]
+		保存: <input type="checkbox" name="savechanges" class="button">
+	[%- END %]
+		<input type="submit" name="op" value="Change" class="button">
+
+	[% IF discussion2 %]
+		</noscript>
+	[%- END %]
+		<input type="hidden" name="sid" value="[% sid %]">
+		[% IF cid %]<input type="hidden" name="cid" value="[% cid %]">[% END %]
+		[% IF pid %]<input type="hidden" name="pid" value="[% pid %]">[% END %]
+		[% IF form.startat %]<input type="hidden" name="startat" value="[% form.startat %]">[% END %]
+		[% UNLESS user.state.discussion_archived || user.state.discussion_future_nopost %]
+			<input type="submit" name="op" value="Reply" class="button">
+		[% END %]
+
+	[% IF discussion2 %]
+		<br>Hidden=<span id="currentHidden">0</span> Displayed=<span id="currentFull">0</span> Abbreviated=<span id="currentOneline">0</span>
+	[% END %]
+		</fieldset>
+		</form>
+	<div class="commentBox">
+		<small>
+		<b>声明:</b>
+		下面的评论属于其发表者所有，不代表本站的观点和立场，我们不负责他们说什么。
+		</small>
+	</div>
+	</div>
+</div>
+__seclev__
+10000
+__version__
+$Id: printCommentsMain;misc;default,v 1.37 2006/05/19 02:02:48 pudge Exp $

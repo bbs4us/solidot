@@ -1,0 +1,143 @@
+__section__
+default
+__description__
+Repository for random data elements.
+
+* value = the name of the data element to retrieve
+
+Each data element may have any number of other variables.
+__title__
+
+__page__
+login
+__lang__
+en_US
+__name__
+data
+__template__
+[% SWITCH value %]
+
+[% CASE 'loginhead' %]
+	[% SWITCH form.op %]
+
+	[% CASE 'userclose' %]
+		正在退出
+
+	[% CASE DEFAULT %]
+		登录
+
+	[% END %]
+
+[% CASE 'mailpasswdhead' %]
+	发送密码
+
+[% CASE 'newuserformhead' %]
+	创建帐号
+
+[% CASE 'newuserhead' %]
+	帐号已创建
+
+[% CASE 'prefshead' %]
+	更改登录设置
+
+[% CASE 'passnomatch' %]
+	密码不匹配。
+
+[% CASE 'passtooshort' %]
+	密码太短。
+
+[% CASE 'passtoolong' %]
+	密码太长。
+
+[% CASE 'oldpassbad' %]
+	当前的密码不正确。
+
+[% CASE 'notchanged' %]
+	设置没有改变。
+
+[% CASE 'passchanged' %]
+	设置已改变。
+
+[% CASE 'email_invalid' %]
+	邮件地址 "[% (form.realemail || form.email) | strip_literal %]" is
+	不是一个有效的地址， 请再试一下， 使用一个格式正确的 Email 地址。
+
+[% CASE 'email_do_not_match' %]
+	你输入的邮件地址不匹配， 请再输入你的 Email 地址。
+
+[% CASE 'duplicate_user' %]
+	用户名 '[% nick %]', 或者与其他的相似，或者已经被使用。
+	请再选择一个。
+
+[% CASE 'new_user_open_proxy' %]
+    根据我们的检测，你正在使用一个对全世界开放的代理服务器在注册帐号，请关闭代理或者请你的系统管理员来做，
+    因为开放代理服务器常常被用于给网站制造垃圾就像这一个。
+
+	<p>如果你有问题，尽管联系 [% constants.adminmail_ban %], 请说明你的代理IP <tt>[% unencoded_ip %]</tt> 以及端口 <tt>[% port %]</tt>.
+
+[% CASE 'newuser_msg' %]
+	[% title = BLOCK %]User [% form.newusernick | strip_literal %] created[% END %]
+	[% PROCESS titlebar title=title width="100%" %]
+	<b>Email</b>=[% form.email | strip_literal %]<br>
+	<b>用户 ID</b>=[% uid %]<br>
+	<b>用户名</b>=[% form.newusernick | strip_literal %]<br>
+	<b>密码</b>=已发送到了 [% form.email | strip_literal %]<br>
+	<p>当你收到你的密码， 你可以
+	<a href="[% constants.real_rootdir %]/login.pl">登录并启用你的帐号</a>。
+
+[% CASE 'email_exists' %]
+	Email 地址 "[% (form.realemail || form.email) | strip_literal %]"
+	已经在我们的数据库中存在，如果你忘记了你的密码，可以
+	<a href="[% constants.real_rootdir %]/login.pl?op=mailpasswdform">把你的密码发送给你</a>。
+
+
+[% CASE 'mail_nonickname' %]
+	用户没有发现， 没有发送过密码。
+
+[% CASE 'mail_readonly' %]
+    抱歉，从你的IP地址和子网，你不能使用“发送密码”功能。如果你认为你不应该看到这个错误，
+	请发邮件到 [% constants.adminmail_ban %], 并且附上你的IP地址，即是 "[% user.ipid %]";
+	在问题中说明这是关于发送密码，以及你的用户名、用户 ID 和 Email 地址。 
+
+[% CASE 'mail_toooften' %]
+	To prevent you from being harassed with email,
+	[% constants.sitename %] limits you to
+	[% constants.mailpass_max_num || 2 %]
+	password[% IF constants.mailpass_max_num > 1 %]s[% END %]
+	sent to you every
+	[% constants.mailpass_max_hours || 48 %] hours. You're over your
+	limit and we're cutting you off. If you really are that
+	forgetful and need another one, try the human at
+	[% constants.adminmail %].
+
+[% CASE 'mail_mailed_note' %]
+	The password for [% name %] was emailed to its registered
+	email address.
+
+[% CASE 'mail_subject' %]
+	[% constants.sitename %] 用户 [% nickname %] 的密码
+
+[% CASE 'mail_msg' %]
+
+你的新密码是 [% newpasswd %].  
+这是系统随机生成的密码，请一定要登录到系统修改你的密码！这个新密码使用之前你的旧密码仍然有效。登录链接：
+<[% gSkin.absolutedir %]/index.pl?op=userlogin&upasswd=[% newpasswd %]&unickname=[% tempnick | fixparam %]&returnto=%2Flogin.pl%3Fop=changeprefs>
+
+如果你本人没有要求而收到了本信息，那可能是其他人使用了你的用户名或者 Email 。
+这看起来像是一个错误，但对你不会有任何危害，他们不会得到你的密码，你尽管可以不理会本信息。
+
+谢谢！
+
+如果你没有要求而收到了多封这样的邮件，那么这里给你提供一些要求者的信息。
+要求者的 IP 地址是 [% remote_ip %].[% IF user_agent %], user agent 是 "[% user_agent %]"
+（也许这些数据未必真实可信，但可能比较有趣，你也许想了解）。[% END %]
+[% IF x_forwarded_for %]万一要求者使用的是设置好的代理服务器，
+他的 X-Forwarded-For header 地址是 "[% x_forwarded_for %]" --
+这个数据也未必是可信的，除非你有相信它的理由（我们没有）。[% END %]
+
+[% END %]
+
+__seclev__
+10000
+__version__
+$Id: data;login;default,v 1.5 2004/06/17 16:11:57 jamiemccarthy Exp $

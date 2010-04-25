@@ -1,0 +1,78 @@
+__section__
+default
+__description__
+
+__title__
+
+__page__
+messages
+__lang__
+zh_CN
+__name__
+list_messages
+__template__
+<div id="users-blocks">
+[% user_titlebar %]
+<div class="generalbody">
+[% messages_menu %]
+
+[% IF user.is_anon %]
+
+<p>
+你没有 <a href="[% gSkin.rootdir %]/login.pl">登录</a> 到系统。
+</p>
+
+[% ELSE %]
+
+[% IF note %]<h2>[% note %]</h2>[% END %]
+
+[% IF message_list.size %]
+<p>这些信息将在系统中保留 <b>[% constants.message_web_expire || 31 %] 天</b>，不管它们是否已被查看，
+[% constants.message_web_expire || 31 %] 天后它们<b>将被删除</b>。</p>
+
+<p>信息标记为 "*" 为未读。</p>
+
+<form action="[% gSkin.rootdir %]/messages.pl" method="post">
+<table width="90%" border="0" cellpadding="2" cellspacing="0">
+[% FOREACH message = message_list %]
+  <tr>
+    <td valign="top" align="center"><input type="checkbox" name="del_[% message.id %]" value="1"></td>
+    <td valign="top">[% IF ! message.readed
+      %]*[% ELSE
+      %]&nbsp;[% END %]</td>
+    <td valign="top"><a href="[% gSkin.rootdir %]/messages.pl?op=display&amp;id=[%
+			message.id
+		%]"><b>[% message.subject || 'Message' %]</b></a></td>
+    <td valign="top"><em>[% Slash.timeCalc(message.date) %]</em></td>
+  </tr>
+[% END %]
+  <tr><td align="center"><input type="submit" value="Delete"></td>
+    <td align="left"><noscript>&nbsp;</noscript><script type="text/javascript" language="Javascript" charset="utf-8">
+<!--
+[%# this JavaScript should not actually be a problem for anyone, but %]
+[%# if it is, it is easy to strip out ... %]
+function selectall (myform) {
+	for (var i = 0; i < myform.elements.length; i++)
+		myform.elements[i].checked = true;
+}
+document.write('<input type="button" value="Select All" onclick="selectall(this.form)"> ');
+//-->
+</script></td><td colspan="2">&nbsp;</td></tr>
+</table>
+
+<input type="hidden" name="op" value="deletemsgs">
+</form>
+
+[% ELSE %]
+
+<p>
+你在系统中没有任何消息。可能没有发送，也可能已被删除或从系统中清理了，或者已通过其他途径传送。
+</p>
+
+[% END ; END %]
+</div>
+</div>
+__seclev__
+500
+__version__
+$Id: list_messages;messages;default,v 1.13 2005/08/19 06:45:59 lancelot Exp $

@@ -1,0 +1,27 @@
+__section__
+default
+__description__
+Display topics menu.
+
+* items = arrayref of hashref of menu items (value (link), label)
+
+__title__
+
+__page__
+menu
+__lang__
+en_US
+__name__
+topics
+__template__
+[
+[% FOR i = items %]
+	<a href="[% i.value %]">[% i.label %]</a>
+	[% " | " UNLESS loop.last %]
+[% END %]
+]
+
+__seclev__
+10000
+__version__
+$Id: topics;menu;default,v 1.6 2005/07/27 22:54:48 pudge Exp $

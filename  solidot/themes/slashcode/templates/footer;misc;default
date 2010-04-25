@@ -1,0 +1,100 @@
+__section__
+default
+__description__
+Text that makes up the bottom of a page
+
+No specially passed variables
+__title__
+
+__page__
+misc
+__lang__
+zh_CN
+__name__
+footer
+__template__
+			</div>	
+		</div>
+		<div id="footer">
+			[% UNLESS user.lowbandwidth %]
+			<em>[% PROCESS motd %]</em>
+			[% END %]
+			<div class="search">
+				<form method="get" action="http://www.google.com/search">
+				 <fieldset>
+					<legend>Google Search</legend>
+					<input type="text" name="query" value="" size="20">
+					<input type="hidden" name="as_sitesearch" value="solidot.org">
+
+					<input type="submit" value="Google Solidot">
+				 </fieldset>
+			  </form>
+			</div>
+ 
+ 			<div class="copyright">
+				[% Slash.db.getBlock('footer', 'block' )  %]
+			</div>
+			<div class="btmnav">
+				<ul>
+					<li class="begin">
+						<a href="[% gSkin.rootdir %]/">首页</a>
+					</li>
+					<li>
+						<a href="[% gSkin.rootdir %]/submit.pl">提交文章</a>
+					</li>
+					<li>
+						<a href="[% gSkin.rootdir %]/search.pl">往日文章</a>
+					</li>
+					<li>
+						<a href="[% gSkin.rootdir %]/pollBooth.pl">过去的投票</a>
+					</li>
+					<li>
+						<a href="[% gSkin.rootdir %]/faq/">常见问题</a>
+					</li>
+					<li>
+						<a href="[% gSkin.rootdir %]/authors.pl">编辑介绍</a>
+					</li>
+                                        [%- IF ! user.is_anon %]
+                                        <li>
+                                                <a href="[% gSkin.rootdir %]/users.pl">个人设置</a>
+                                        </li>
+                                        [%- END %]
+          <li>
+						<a href="[% gSkin.rootdir %]/privacy.html">隐私政策</a>
+					</li>
+          <li>
+						<a href="[% gSkin.rootdir %]/terms.html">使用条款</a>
+					</li> 
+					<li>
+             <a href="http://mail.solidot.org/" target="_blank">邮箱</a> 
+          </li>
+          <li>
+						<a href="[% gSkin.rootdir %]/contact.html">联系</a>
+					</li> 
+					<li>
+            <a href="[% gSkin.rootdir %]/service/ad.html">广告</a>
+          </li>
+ 					<li>
+						<a href="http://feeds.feedburner.com/solidot">RSS</a>
+					</li>
+				</ul>
+ 			</div>
+      <div id="copyinfo">
+         <p>本站提到的所有注册商标属于他们各自的所有人所有，评论属于其发表者所有，其余内容版权属于 Solidot.org(2005-2006) 所有 。</p>
+         <p><a href="http://www.slashcode.com/" title="Slash 开源项目" target="_blank"><img src="//solidot.org/images/btn/slash.gif" border="0" alt="slashcode" /></a>  <a href="http://www.cpan.org/" title="Perl" target="_blank"><img src="//solidot.org/images/btn/perl.gif" border="0" alt="perl" /></a>  <a href="http://apache.org/" title="Apache 服务器" target="_blank"><img src="//solidot.org/images/btn/apache.gif" border="0" alt="apache" /></a>  <a href="http://www.mysql.com/" title="MySQL" target="_blank"><img src="//solidot.org/images/btn/mysql.gif" border="0" alt="mysql" /></a> </p>
+         <p>Solidot 使用 <a href="http://www.vmmatrix.com/" target="_blank"><img src="http://solidot.org/images/btn/vmmatrix.gif" border="0"></a> <a href="http://www.vmmatrix.com" target="_blank">微睦独立主机</a>。 </p>
+         <p><a href="http://solidot.org/" title="Solidot.org"><img src="http://solidot.org/images/btn/solidot-s.gif" border="0"></a></p>
+         <p><a href="http://www.miibeian.gov.cn" target="_blank">豫ICP备06010348号</a></p>    
+        </div>
+  		</div>
+		[% IF user.is_admin %]
+			[% Slash.currentAdminUsers() %]
+		[% END %]
+	</div> 
+ </body>
+</html>
+
+__seclev__
+10000
+__version__
+$Id: footer;misc;default,v 1.18 2006/01/03 19:16:46 pudge Exp $

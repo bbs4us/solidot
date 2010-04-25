@@ -1,0 +1,34 @@
+__section__
+default
+__description__
+显示被通过IPID/SubnetID禁止的用户
+
+* ip = their (un-encoded) IP number
+
+__title__
+
+__page__
+misc
+__lang__
+zh_CN
+__name__
+bannedtext_ipid
+__template__
+<html>
+<head><title>已被禁止！</title></head>
+<body bgcolor="pink">
+<h1>你的网络或IP地址已经被 [% constants.sitename %] 禁止</h1><br>
+你的网络或IP地址已经被 [% constants.sitename %] 禁止，
+由于脚本洪水式攻击, 过度的机器人漫游, 或者发表的评论故意破坏网络浏览器工作, 
+这些来自你的网络或IP地址。如果你认为这些没有根据,
+请发一封在标题中含有你的IP地址 (<b>[% ip %]</b>) 的邮件到
+<a href="mailto:[% constants.adminmail_ban | strip_attribute %]">[% constants.adminmail_ban %]</a>,
+我们将检查被禁止的原因. 如果你没有包括你的IP地址 (再次，
+<em>在标题中</em>)，那么你的邮件将被删除不会被处理。我的意思是尽管告诉我们，我们很友好，但我们也精力有限。
+</body>
+</html>
+
+__seclev__
+500
+__version__
+$Id: bannedtext_ipid;misc;default,v 1.0 2006/05/08 19:10 Jesse Lee Exp $

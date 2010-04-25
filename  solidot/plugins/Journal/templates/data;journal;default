@@ -1,0 +1,87 @@
+__section__
+default
+__description__
+Repository for random data elements.
+
+* value = the name of the data element to retrieve
+
+Each data element may have any number of other variables.
+__title__
+
+__page__
+journal
+__lang__
+zh_CN
+__name__
+data
+__template__
+[% SWITCH value %]
+
+[% CASE 'mainhead' %]
+	[% returnme.data_constant = 1 %]
+	[% constants.sitename %] 日志系统
+
+[% CASE 'userhead' %]
+[% IF user.lowbandwidth %]
+	<a href="[% gSkin.rootdir %]/~[% nickname | strip_paramattr %]/">[% nickname | strip_literal %]</a> ([% uid %]) 的 <a href="[% gSkin.rootdir %]/~[% nickname | strip_paramattr %]/journal/">日志</a>  
+	[% ELSE %]
+	<a href="[% gSkin.rootdir %]/~[% nickname | strip_paramattr %]/">[% nickname | strip_literal %]</a> ([% uid %])  [% PROCESS zoo_icons person=uid implied="" %] 的 <a href="[% gSkin.rootdir %]/~[% nickname | strip_paramattr %]/journal/">日志</a>
+	[% END %]
+
+[% CASE 'friendhead' %]
+[% IF user.lowbandwidth %]
+	<a href="[% gSkin.rootdir %]/~[% nickname | strip_paramattr %]/">[% nickname | strip_literal %]</a>的 <a href="[% gSkin.rootdir %]/~[% nickname | strip_paramattr %]/friends/">朋友</a>
+[% ELSE %]
+	<a href="[% gSkin.rootdir %]/~[% nickname | strip_paramattr %]/">[% nickname | strip_literal %]</a>的 <a href="[% gSkin.rootdir %]/~[% nickname | strip_paramattr %]/friends/">朋友</a>
+[% END %]
+
+[% CASE 'noedit' %]
+	你不能编辑本篇日志。
+	
+[% CASE 'nousers' %]
+	没有找到用户的日志符合 "[% form.nickname | strip_literal %]".
+
+[% CASE 'nojournal' %]
+	用户 "[% nouser.nickname | strip_literal %]" ([% nouser.uid %]) 没有日志文章。
+	
+[% CASE 'noentries' %]
+	[% IF nickname;
+		nickname | strip_literal %] 没有
+		[% ELSE %]
+	   	你没有
+	[% END %]发表任何日志文章。
+[% CASE 'nofriends' %]
+	[% returnme.data_constant = 1 %]
+	You have not made any friends (or all of your friends are losers
+	who have not created entries in their journals).
+
+[% CASE 'noviewfriends' %]
+	[% returnme.data_constant = 1 %]
+	Either all of your friends are lame or you just have none. Either
+	way this page is blank.
+
+[% CASE 'create_failed' %]
+	[% returnme.data_constant = 1 %]
+	An unknown error occured when you tried to create a journal entry.
+	Please go back to the beginning and try again.
+
+[% CASE 'no_desc_or_article' %]
+	[% returnme.data_constant = 1 %]
+	Either the subject or the journal text was empty.  Please complete
+	the entry and try again.
+
+[% CASE 'noentries_found' %]
+	[% returnme.data_constant = 1 %]
+	Sorry, the requested journal entries were not found.
+
+[% CASE 'journalfoot' %]
+	</div></div>
+
+[% CASE 'submit_must_enable_comments' %]
+	你必须启用评论，如果你打算把本日志提交为网站讨论。
+[% END %]
+
+__seclev__
+10000
+__version__
+$Id: data;journal;default,v 1.21 2006/02/17 22:26:03 pudge Exp $

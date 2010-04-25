@@ -1,0 +1,30 @@
+__section__
+default
+__description__
+Text included in displaying thread
+
+* link = linkComment data to get to all comments
+__title__
+
+__page__
+misc
+__lang__
+zh_CN
+__name__
+displayThread
+__template__
+[% mystr = "<b>还有 $link 在你当前的门槛设置之下。</b>" %]
+[% IF discussion2 %]
+	<li id="hidestring_[% pid %]"><noscript>[% mystr %]</noscript></li>
+	<li class="hide">
+		<script type="text/javascript">kidHiddens([% pid %], [% hidden %])</script>
+	</li>
+
+[% ELSE %]
+	<li>[% mystr %]</li>
+[% END %]
+
+__seclev__
+10000
+__version__
+$Id: displayThread;misc;default,v 1.9 2006/05/03 05:14:45 pudge Exp $

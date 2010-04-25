@@ -1,0 +1,240 @@
+__section__
+default
+__description__
+Template which renders the comment editor.
+
+* error_message = error message if there is an error
+* preview = preview of comment, if applicable
+* reply = hashref of comment replying to
+* hide_name = hide name / log out link
+* hide_email = hide email display
+* extras = array of any extras associated with this comment
+ 
+__title__
+
+__page__
+comments
+__lang__
+en_US
+__name__
+edit_comment
+__template__
+<div id="wide">
+[% IF form.pid %]
+        [% PROCESS titlebar title="回复到: $reply.subject" %]
+        <div class="generalbody">
+		<ul id="commentlisting">
+                [% Slash.dispComment(reply) %]
+		</li>
+		</ul>
+        </div>
+[% END %]
+
+[% IF newdiscussion || form.newdiscussion %]
+	[% PROCESS titlebar title="创建新$label" %]
+[% ELSE %]
+	[% PROCESS titlebar title="发表评论" %]
+[% END %]
+	<div class="generalbody">
+<!-- error message -->
+<!-- newdiscussion [% newdiscussion %] form.newdiscussion [% form.newdiscussion %] -->
+[% IF error_message %]
+        <div class="error">
+                [% error_message %]
+        </div>
+[% END %]
+<!-- end error message -->
+<form action="[% gSkin.rootdir %]/comments.pl" method="post">
+[% IF preview %]                
+	<fieldset>
+		<legend>
+        [% IF newdiscussion || form.newdiscussion %]
+                Preview [% $label %]
+        [% ELSE %]              
+               预览评论
+        [% END %]               
+		</legend>
+		[% preview %]   
+	</fieldset>
+[% END %]    
+	<fieldset>
+	<legend>编辑评论</legend>
+	<input type="hidden" name="sid" value="[% form.sid || sid %]">
+	<input type="hidden" name="pid" value="[% form.pid %]">
+	[% IF form.returnto_commentpostsuccess && form.returnto_commentpostsuccess_confirm %]
+		<input type="hidden" name="returnto_commentpostsuccess"
+			value="[% form.returnto_commentpostsuccess | strip_attribute %]">
+		<input type="hidden" name="returnto_commentpostsuccess_confirm"
+			value="[% form.returnto_commentpostsuccess_confirm | strip_attribute %]">
+	[% END %]
+	<input type="hidden" name="mode" value="[% user.mode %]">
+	<input type="hidden" name="startat" value="[% user.startat %]">
+	<input type="hidden" name="threshold" value="[% user.threshold %]">
+	<input type="hidden" name="commentsort" value="[% user.commentsort %]">
+        [% IF gotmodwarning %]<input type="hidden" name="gotmodwarning" value="1">[% END %]
+
+[% IF newdiscussion || form.newdiscussion %]
+	<input type="hidden" name="indextype" value="[% indextype %]">
+	<input type="hidden" name="newdiscussion" value="[% newdiscussion %]">
+[% END %]
+
+[% PROCESS formkey_tag %]
+
+[% userlink = '' %]
+[% IF user.is_anon %]
+<!-- anon login code -->
+	[% userlink = "<a href=\"${gSkin.rootdir}/users.pl\">Create an Account</a>" %]
+		你没有登录， 你可以用下面的表格登录，或者<a href="[% gSkin.rootdir %]/users.pl">创建一个账号</a>，		
+		或者以<b>[% user.nickname | strip_literal %]</b>发表。
+	<input type="hidden" name="rlogin" value="1">
+
+	[% PROCESS formLabel value => '用户名' %]
+		<input type="text" name="unickname" value="[% form.nickname | strip_attribute %]">
+
+	[% PROCESS formLabel value => '密码' %]
+		<input type="password" name="upasswd">
+		<input type="checkbox" name="login_temp" value="yes">公共终端
+
+[% ELSE;
+	userlink = "<a href=\"${gSkin.rootdir}/login.pl?op=userclose\">退出</a>";
+END %]
+	[% UNLESS hide_name %]
+	[% PROCESS formLabel value => '用户名' %]
+		<a href="[% gSkin.rootdir %]/users.pl">[% user.nickname | strip_literal %]</a> [ [% userlink %] ]
+	[% END %]
+[% IF user.fakeemail %]
+	[% UNLESS hide_email %]
+	[% PROCESS formLabel value => 'Email' %]
+		[% user.fakeemail | strip_literal %]
+	[% END %]
+<!-- end anon login code -->
+[% END %]
+[% IF user.homepage %]
+	[% PROCESS formLabel value => 'URL' %]
+		<a href="[% user.homepage %]" rel="nofollow">[% user.homepage | strip_literal %]</a>
+[% END %]
+
+	[% IF newdiscussion || form.newdiscussion %]
+			[% PROCESS formLabel value=>'Topic' %]
+				[% Slash.selectTopic('topic', form.topic, section, 1) %]
+		[% IF section_select %]
+			Section: 
+				[% section_select %]
+		[% END %]
+			[% PROCESS formLabel value=>'URL' %]
+				<input type="text" name="url" value="[% form.url | strip_attribute %]" size="50">
+	[% END %]
+
+	[% PROCESS formLabel value => '标题' %]
+		<input type="text" name="postersubj" value="[% form.postersubj | strip_attribute %]" size="50" maxlength="50">
+	[% FOR extra = extras %]
+	
+		<b>[% extra.0 %]
+		
+		[% IF extra.2 == 'text' %]
+			<input type="text" name="[% extra.1 %]" value="[% form.${extra.1} | strip_attribute %]" size="50">
+		[% ELSIF extra.2 == 'list' %]
+			[% pulldown = extra.1 %]
+			[% Slash.createSelect(extra.1, Slash.db.getDescriptions('genericstring',pulldown), form.${extra.1}, 1, 1) %]	
+		[% END %]
+		</b>
+	[% END %]
+	
+		[% PROCESS formLabel value => '评论' %]
+		<textarea wrap="virtual" name="postercomment" rows="[% user.textarea_rows || constants.textarea_rows %]" cols="[% user.textarea_cols || constants.textarea_cols %]">[% form.postercomment | strip_literal %]</textarea>
+		[% PROCESS formNote note => '使用预览按钮！检查链接！' %]
+		<br>
+		[% IF user.is_anon %]
+		[% anon_messages = [
+			"登录的用户将不会被强制预览他们的评论。",
+		#	"Logged-in posts are seen by xx as many users.",
+			"得分: 0 (登录用户起始分为: 1)."
+		]%]
+		<br>[% anon_messages.rand %]
+		<a href="[% gSkin.rootdir %]/users.pl">创建一个账号</a>
+		[% END %]
+
+	 
+
+[% IF !user.is_anon && user.karma > constants.goodkarma %]
+		<input type="hidden" name="nobonus_present" value="1">
+		<input type="checkbox" name="nobonus"[% IF form.nobonus; constants.markup_checked_attribute ; END %]> No Karma Bonus
+[% do_br = 1; END;
+IF !user.is_anon && user.is_subscriber %]
+		<input type="hidden" name="nosubscriberbonus_present" value="1">
+		<input type="checkbox" name="nosubscriberbonus"[% IF form.nosubscriberbonus; constants.markup_checked_attribute ; END %]> No Subscriber Bonus
+[% do_br = 1; END;
+IF constants.allow_anonymous && user.karma > -1 && !user.is_anon && discussion.commentstatus == 'enabled'  %]
+		<input type="hidden" name="postanon_present" value="1">
+		<input type="checkbox" name="postanon"[% IF form.postanon; constants.markup_checked_attribute ; END %]> 匿名发表
+[% do_br = 1; END;
+IF do_br %]<br>[% END %]
+
+[% 
+	formats = Slash.db.getDescriptions('postmodes');
+	
+	format_select = form.posttype ?
+	Slash.createSelect('posttype', formats, form.posttype, 1, 1)
+	:
+	Slash.createSelect('posttype', formats, user.posttype, 1);
+%]
+
+[% IF constants.plugin.HumanConf && constants.hc && constants.hc_sw_comments && user.state.hc %]
+	[% IF user.state.hcinvalid %]
+		[% user.state.hcerror %]
+	[% ELSE %]
+		[% user.state.hcquestion %]
+		[% user.state.hchtml %]
+		<input type="text" name="hcanswer" value="[% form.hcanswer | strip_attribute %]" size=8 maxlength=8>
+		[% IF !user.is_anon || (user.is_anon && preview) %]
+		<input type="submit" value="提交" class="button" onclick="document.getElementById('op').value='Submit'"> 
+		<input type="hidden" value="" name="op" id="op">
+		[% END %]
+		<input type="submit" value="预览" class="button" onclick="document.getElementById('op').value='Preview'">
+		[% format_select %]
+	[% END %]
+[% ELSE %]
+<p>
+	[% format_select %]
+	<input type="submit" value="预览" class="button" onclick="document.getElementById('op').value='Preview'"> 
+	<input type="hidden" value="" name="op" id="op">
+	[% IF !user.is_anon || (user.is_anon && preview) %]
+	<input type="submit" value="提交" class="button" onclick="document.getElementById('op').value='Submit'">
+	[% END %]
+</p>
+[% END %]
+			<div class="notes">
+				<b>允许的 HTML 标签</b><br>
+				&lt;[% constants.approvedtags.join("&gt;			&lt;") %]&gt;
+				[% IF constants.approvedtags.grep("ECODE").0 %]
+					(Use "ECODE" instead of "PRE" or "CODE".)
+				[% END %]
+	
+				<br>	
+				<b>链接</b><br>
+				<code>&lt;URL:http://example.com/&gt;</code> 将被自动加为链接。
+				<br>
+				<b>重要提示</b>
+				<ul>
+					<li>请尽量贴近主题；</li>
+					<li>尽量回复其他人的评论而不是新开主题；</li>
+					<li>在发表前阅读其他人的信息，避免简单的重复，可能已经发表过；</li>
+					<li>用一个清晰的标题描述你想要说什么；</li>
+					<li>政治的、宗教的、色情的、离题、广告、违反中国法律的以及其它不适当的评论可能将被管理。 (你可以通过更改你的用户设置页面的“入口”来阅读所有内容，甚至是管理过的。)</li>
+					[% IF user.is_anon %]
+						<li>如果你想把其他人添加到你的评论的回复发送给你，考虑 <a href="[% gSkin.rootdir %]/my/">登录</a> 或者 <a href="[% gSkin.rootdir %]/login.pl?op=newuserform">创建一个账号</a>。</li>
+					[% END %]
+				</ul>
+
+				<p>
+					有关帐号或者发表评论的问题请发邮件给 <a href="mailto:[% constants.adminmail | strip_attribute %]">[% constants.siteadmin_name %]</a>.
+				</p>
+			</div>	
+		</fieldset>
+		</form>
+	</div>
+</div>
+__seclev__
+1000
+__version__
+$Id: edit_comment;comments;default,v 1.46 2005/08/25 14:23:16 tvroom Exp $

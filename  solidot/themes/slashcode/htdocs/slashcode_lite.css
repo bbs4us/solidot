@@ -1,0 +1,81 @@
+a { color: #00E; }
+
+#articles, #users-blocks, #polls
+{
+     margin: 0 15.6em 1em 0;
+}
+
+body, #frame, .generaltitle, .article, .journalgeneric, #links, #links div.title, #links h4, #links div.content, #slashboxes div.content, #links div.block, #slashboxes div.block,  #slashboxes div.title, #slashboxes h4, #slashboxes, .btmnav
+{
+	background: transparent;
+}
+div.storylinks div ul, .article .body, .journalgeneric .body, .article .details, .journalgeneric .details 
+
+{
+margin-left: 0;
+padding-left: 0;
+}
+div.storylinks { border: 0px; }
+/* Header */
+#slogan h2
+{
+	color: #000;
+}
+
+/* links */
+#slashboxes div.title, #links div.title
+{
+	background: #000;
+}
+
+#links h4 a, #slashboxes h4 a { color: #fff; }
+
+/* General */
+
+.generaltitle div.title, .article div.title, .journalgeneric div.title
+{
+	background: transparent;
+	border-bottom: 1px solid #000;
+	height: 100%;
+}
+
+.generaltitle h3, .article h3, .journalgeneric h3
+{
+	background: transparent;
+	color: #000;
+	margin-left: 0;
+	padding: 0;
+}
+
+.generaltitle h3 a, .article h3 a, .generaltitle h3 a:visited, .article h3 a:visited, .journalgeneric h3 a, .journalgeneric h3 a:visited
+{
+        color: #666;
+}
+
+.generalbody, .article .details, .journalgeneric .details, .article div.body, .journalgeneric div.body
+{
+        border: none;
+        background: transparent; 
+}
+
+div.storylinks, div.storylinks div ul, div.storylinks div
+{
+        background: transparent; 
+	margin: 0 0 1em 0;
+}
+.btmnav ul li a, .btmnav ul li a:visited { color: #555;}
+
+.article div.details
+{
+	background: transparent;
+	border-top: 0px;
+	border: 0px;
+}
+
+.article div.body {
+	border: 0px;
+}
+
+
+.commentBox { background: #000; }
+.commentBoxForm { background: #ccc;}

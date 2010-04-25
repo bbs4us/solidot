@@ -1,0 +1,49 @@
+__section__
+default
+__description__
+Repository for random data elements.
+
+* value = the name of the data element to retrieve
+
+Each data element may have any number of other variables.
+__title__
+
+__page__
+metamod
+__lang__
+zh_CN
+__name__
+data
+__template__
+[% SWITCH value %]
+[% CASE 'not-eligible' %]
+	[% returnme.data_constant = 1 %] 
+	<br>你现在不能 Meta Moderate.<br>
+	返回到
+	<a href="[% constants.real_rootdir %]/"> [% constants.sitename %] 主页</a>.<br>
+
+[% CASE 'header' %]
+	[% returnme.data_constant = 1 %] 
+	Meta Moderation
+
+[% CASE 'no_moderation' %]
+	[% returnme.data_constant = 1 %] 
+	<p>[% constants.sitename %] 的评判系统现在下线.</p>
+
+[% CASE 'unexpected_item' %]
+	[% returnme.data_constant = 1 %] 
+	<p>在执行中出现了错误. 请重新加载你的meta-moderation 表格并且重试。</p>
+
+[% CASE 'thanks' %]
+	Thanks for meta-moderating some of [% constants.sitename %]'s many moderations.
+	This gives our moderators feedback and helps the whole system work!
+	<p>You probably want to go
+	<a href="[% constants.real_rootdir %]/">home</a> now, or maybe to
+	<a href="[% constants.real_rootdir %]/users.pl">your user page</a>.
+
+[% END %]
+
+__seclev__
+1000
+__version__
+$Id: data;metamod;default,v 1.13 2005/07/27 22:54:46 pudge Exp $

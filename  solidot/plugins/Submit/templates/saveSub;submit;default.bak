@@ -1,0 +1,34 @@
+__section__
+default
+__description__
+Save a submission
+
+* title = passed to titlebar
+* width = passed to titlebar
+* missingemail = boolean for whether email is missing
+* anonsubmit = boolean for whether submission is anonymous
+* submissioncount = total submissions pending
+__title__
+
+__page__
+submit
+__lang__
+zh_CN
+__name__
+saveSub
+__template__
+[% PROCESS titlebar %]
+[% IF missingemail %]
+	<p>也许下次你愿意输入一个邮箱地址或者一个URL.</p>
+[% END %]
+
+[% IF anonsubmit %]
+	<p>本文已匿名提交。</p>
+[% END %]
+
+	<p>感谢提交。</p>
+
+__seclev__
+10000
+__version__
+$Id: saveSub;submit;default,v 1.8 2005/09/07 17:04:48 tvroom Exp $

@@ -1,0 +1,87 @@
+__section__
+default
+__description__
+Prints a pollbooth
+
+* question = question text
+* answers = arrayref of hashrefs (answer, aid, votes)
+* qid = question ID
+* has_activated = has this poll become active?
+* poll_open = is this poll still open?
+* voters = number of voters
+* comments = number of comments
+* primaryskid = primaryskid
+* returnto = Optional URL to return to once vote is registered.
+
+
+__title__
+
+__page__
+misc
+__lang__
+zh_CN
+__name__
+pollbooth
+__template__
+[% IF has_activated or user.is_admin %]
+	[% IF user.is_admin %]
+		[% IF !has_activated %]
+		(Poll not yet active.)<br>
+		[% END %]
+	[% END %]
+
+	[% can_vote = poll_open ? 1 : 0 %]
+
+	[% IF env.script_name && can_vote;
+	      reskey = Slash.getObject('Slash::ResKey');
+	      rkey = reskey.key('pollbooth', { qid => qid });
+	      IF !rkey.create;  # didn't work, bail
+	         can_vote = 0;
+	      END;
+	   ELSE;	
+	      rkey = '';
+	   END;
+	%]
+
+	[% IF !can_vote %]
+		<b>[% question | strip_literal %]</b>
+	   [% FOREACH ans = answers %]
+		<li>[% ans.answer | strip_literal %] <em>([% ans.votes %])</em></li>
+	   [% END %]
+
+		<p><em>[% IF rkey && rkey.errstr %]([% rkey.errstr %])[% ELSIF !poll_open %](Poll is closed.)[% END %]</em><br>
+		[ <a href="[% gSkin.rootdir %]/pollBooth.pl?qid=[% qid %]&amp;aid=-1"><b>结果</b></a> |
+		<a href="[% gSkin.rootdir %]/pollBooth.pl"><b>投票</b></a> ] <br>
+		评论:<b>[% comments %]</b> | 得票数:<b>[% voters %]</b>
+
+	[% ELSE %]
+	
+		<form action="[% gSkin.rootdir %]/pollBooth.pl" method="post">
+			<fieldset>
+				<legend>投票</legend>
+				<input type="hidden" name="qid" value="[% qid | strip_attribute %]">
+			[% IF user.currentSkin %]
+				<input type="hidden" name="section" value="[% user.currentSkin | strip_attribute %]">
+			[% END %]
+				<b>[% question | strip_literal %]</b>
+
+			[% FOREACH ans = answers %]
+				<br><input type="radio" name="aid" value="[% ans.aid | strip_attribute %]">[% ans.answer | strip_literal %]
+			[% END %]
+
+				<br><input type="submit" value="投票">
+				[% IF env.gateway_interface; PROCESS reskey_tag; END %]
+				[ <a href="[% gSkin.rootdir %]/pollBooth.pl?qid=[% qid %]&amp;aid=-1"><b>结果</b></a> |
+				<a href="[% gSkin.rootdir %]/pollBooth.pl"><b>投票</b></a> ] <br>
+				评论:<b>[% comments %]</b> | 得票数:<b>[% voters %]</b>
+			</fieldset>
+		</form>
+	[% END %]
+[% END %]
+__seclev__
+10000
+__version__
+$Id: pollbooth;misc;default,v 1.15 2005/10/20 19:53:10 pudge Exp $
+
+
+
